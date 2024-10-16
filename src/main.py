@@ -8,7 +8,7 @@ import click, io
 @click.option(
     '--configuration',
     '-c',
-    default='~/mrt-simulation-config.json',
+    default='/home/imprj/mrt-simulation-config.json',
     show_default=True,
     type=click.File('r'),
     help='Path to the json configuration file.',
