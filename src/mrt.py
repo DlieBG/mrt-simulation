@@ -12,7 +12,7 @@ def check_mrt2exabgp():
         click.echo(click.style('error', fg='red'))
         sys.exit(1)
 
-def create_python_simulation_script(tmp_path: Path, mrt_file: str) -> Path:
+def create_python_simulation_script(tmp_path: Path, mrt_file: str, ignore_playback_speed: bool) -> Path:
     '''Create python simulation script and write output to temporary file.'''
 
     python_simulation_script = subprocess.run(
@@ -26,6 +26,12 @@ def create_python_simulation_script(tmp_path: Path, mrt_file: str) -> Path:
         capture_output=True,
         text=True,
     )
+
+    if ignore_playback_speed:
+        python_simulation_script.stdout = python_simulation_script.stdout.replace(
+            'time.sleep(msg)',
+            'pass',
+        )
 
     python_simulation_script_path = tmp_path.joinpath('simulation.py')
     python_simulation_script_path.write_text(
