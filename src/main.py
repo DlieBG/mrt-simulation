@@ -13,6 +13,15 @@ import click, io
     type=click.File('r'),
     help='Path to the json configuration file.',
 )
+@click.option(
+    '--ignore-playback-speed',
+    '-i',
+    default=False,
+    show_default=True,
+    is_flag=True,
+    type=bool,
+    help='Ignore the playback speed of the mrt simulation.',
+)
 @click.argument(
     'mrt_file',
     type=click.Path(
@@ -20,7 +29,7 @@ import click, io
         resolve_path=True,
     ),
 )
-def main(mrt_file: str, configuration: io.BytesIO):
+def main(mrt_file: str, configuration: io.BytesIO, ignore_playback_speed: bool):
     check_exabgp()
     check_mrt2exabgp()
     configuration = check_configuration(
@@ -31,6 +40,7 @@ def main(mrt_file: str, configuration: io.BytesIO):
     python_simulation_script_path = create_python_simulation_script(
         tmp_path=tmp_path,
         mrt_file=mrt_file,
+        ignore_playback_speed=ignore_playback_speed,
     )
     exabgp_configuration_path = create_exabgp_configuration(
         configuration=configuration,
